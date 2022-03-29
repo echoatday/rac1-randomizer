@@ -1,3 +1,6 @@
+require 'deepcopy'
+require 'printtable'
+
 -- key item ids
 local id = {
 	heli_pack=2,
@@ -46,114 +49,93 @@ local idb = {
 	veldin=0x12,
 }
 
-local tech = {
-	-- ITEMS --
-	heli_pack={
-		casual={}
-	},
-	thruster_pack={
-		casual={}
-	},
-	hydro_pack={
-		casual={id.hydrodisplacer}
-	},
-	sonic_summoner={
-		casual={}
-	},
-	o2_mask={
-		casual={id.thruster_pack, id.pilots_helmet}
-	},
-	pilots_helmet={
-		casual={}
-	},
-	swingshot={
-		casual={}
-	},
-	hydrodisplacer={
-		casual={id.trespasser}
-	},
-	trespasser={
-		casual={id.swingshot}
-	},
-	metal_detector={
-		casual={id.magneboots}
-	},
-	magneboots={
-		casual={}
-	},
-	grindboots={
-		casual={id.swingshot}
-	},
-	hoverboard={
-		casual={}
-	},
-	hologuise={
-		casual_heli={id.heli_pack, id.swingshot, id.grindboots, id.hoverboard},
-        casual_thruster={id.thruster_pack, id.swingshot, id.grindboots, id.hoverboard}
-	},
-	pda={
-		casual={id.magneboots}
-	},
-	map_o_matic={
-		casual={id.grindboots}
-	},
-	bolt_grabber={
-		casual={id.hydro_pack, id.o2_mask}
-	},
-	persuader={
-		casual={id.hydrodisplacer, id.trespasser, id.raritanium}
-	},
-	zoomerator={
-		casual_heli={id.heli_pack},
-        casual_thruster={id.thruster_pack}
-	},
-	raritanium={
-		casual={id.swingshot}
-	},
-	codebot={
-		casual={id.hydro_pack, id.o2_mask}
-	},
-	premium_nanotech={
-		casual={id.o2_mask}
-	},
-	ultra_nanotech={
-		casual={id.o2_mask}
-	},
-	-- INFOBOTS --
+local strats = {
+	-- VELDIN 1
 	novalis={
 		casual={}
 	},
+
+	-- NOVALIS
 	aridia={
 		casual={}
 	},
 	kerwan={
 		casual={}
 	},
+
+	-- ARIDIA
+	sonic_summoner={
+		casual={}
+	},
+	trespasser={
+		casual={id.swingshot}
+	},
+	hoverboard={
+		casual={}
+	},
+
+	-- KERWAN
 	eudora={
 		casual_heli={id.heli_pack},
         casual_thruster={id.thruster_pack}
 	},
-	rilgar={
+	heli_pack={
 		casual={}
 	},
+	swingshot={
+		casual={}
+	},
+
+	-- EUDORA
 	blarg={
 		casual_heli={id.heli_pack, id.swingshot, id.trespasser},
         casual_thruster={id.thruster_pack, id.swingshot, id.trespasser}
 	},
+
+	-- RILGAR
 	umbris={
 		casual_heli={id.heli_pack, id.swingshot, id.hydrodisplacer},
         casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer}
 	},
+	zoomerator={
+		casual_heli={id.heli_pack},
+        casual_thruster={id.thruster_pack}
+	},
+
+	-- BLARG
+	rilgar={
+		casual={}
+	},
+	hydrodisplacer={
+		casual={id.trespasser}
+	},
+	grindboots={
+		casual={id.swingshot}
+	},
+
+	-- UMBRIS
 	batalia={
 		casual_heli={id.heli_pack, id.swingshot, id.hydrodisplacer},
         casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer}
 	},
+
+	-- BATALIA
 	gaspar={
 		casual={id.grindboots}
 	},
 	orxon={
 		casual={}
 	},
+	metal_detector={
+		casual={id.magneboots}
+	},
+
+	-- GASPAR
+	pilots_helmet={
+		casual={}
+	},
+
+	-- ORXON
 	pokitaru={
 		casual={}
 	},
@@ -161,44 +143,106 @@ local tech = {
 		casual_heli={id.heli_pack, id.swingshot, id.magneboots},
         casual_thruster={id.thruster_pack, id.swingshot, id.magneboots}
 	},
+	magneboots={
+		casual={}
+	},
+	premium_nanotech={
+		casual={id.o2_mask}
+	},
+	ultra_nanotech={
+		casual={id.o2_mask}
+	},
+
+	-- POKITARU
+	thruster_pack={
+		casual={}
+	},
+	o2_mask={
+		casual={id.thruster_pack, id.pilots_helmet}
+	},
+	persuader={
+		casual={id.hydrodisplacer, id.trespasser, id.raritanium}
+	},
+
+	-- HOVEN
 	gemlik={
 		casual={}
 	},
+	hydro_pack={
+		casual={id.hydrodisplacer}
+	},
+	raritanium={
+		casual={id.swingshot}
+	},
+
+	-- GEMLIK
 	oltanis={
 		casual={id.swingshot, id.trespasser, id.magneboots}
 	},
+
+	-- OLTANIS
 	quartu={
 		casual={id.grindboots}
 	},
+	pda={
+		casual={id.magneboots}
+	},
+
+	-- QUARTU
 	kalebo={
 		casual={id.swingshot}
 	},
 	fleet={
 		casual={id.thruster_pack, id.swingshot, id.hologuise}
 	},
+	bolt_grabber={
+		casual={id.hydro_pack, id.o2_mask}
+	},
+
+	-- KALEBO
+	hologuise={
+		casual_heli={id.heli_pack, id.swingshot, id.grindboots, id.hoverboard},
+        casual_thruster={id.thruster_pack, id.swingshot, id.grindboots, id.hoverboard}
+	},
+	map_o_matic={
+		casual={id.grindboots}
+	},
+
+	-- FLEET
 	veldin={
 		casual={id.magneboots, id.hologuise}
 	},
+	codebot={
+		casual={id.hydro_pack, id.o2_mask}
+	},
+
 }
 
-function Invert(table)
-    local output={}
-    for k,v in pairs(table) do
-        output[v]=k
-    end
-    return output
+-- build the locations table
+local locations = {}
+for location,_ in pairs(strats) do					-- for each location in strats table
+	locations[location] = {}						-- add that place to the locations table!
+	for strat,_ in pairs(strats[location]) do		-- then, for each strat in the strats table,
+		locations[location][strat] = false			-- put it into locations as a deactivated bool.
+	end
 end
 
---big casual test--
-for check,strats in pairs(tech) do
-    for strat,items in pairs(strats) do
-        if strat:find('casual') then
-            local output_string = strat..' strats for '..check..' require: '
-            for _,item in ipairs(items) do
-                output_string = output_string..Invert(id)[item]..', '
-            end
-            print(output_string)
-        end
-    end
+-- toggle an entire category of strats
+function ActivateCategory(category, new_status)
+	for location,_ in pairs(locations) do							-- for each key location,
+		for strat,_ in pairs(locations[location]) do				-- check its strats.
+			if strat:find(category) then							-- if the strat is within the selected category,
+				locations[location][strat] = new_status				-- 'toggle' it.
+			end
+		end
+	end
 end
---table of checks that look for strats--
+
+-- turn on selected strats
+local settings = {standard='casual', speedtech=''}
+ActivateCategory(settings.standard, true)
+
+
+PrintTable(locations) -- for testing
+
+print('Done!')
