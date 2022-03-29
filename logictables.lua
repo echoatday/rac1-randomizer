@@ -174,7 +174,8 @@ local strats = {
 		casual={id.hydrodisplacer}
 	},
 	raritanium={
-		casual={id.swingshot}
+		casual_heli={id.heli_pack, id.swingshot},
+		casual_thruster={id.thruster_pack, id.swingshot}
 	},
 
 	-- GEMLIK
