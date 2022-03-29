@@ -1,7 +1,7 @@
 require 'deepcopy'
 require 'io'
 require 'crc32'
--- require 'tables'
+-- require 'logictables'
 
 items = {
 	{id=2, name="Heli-pack", req_items={} },
