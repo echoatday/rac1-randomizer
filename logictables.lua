@@ -52,171 +52,227 @@ local idb = {
 local strats = {
 	-- VELDIN 1
 	novalis={
-		casual={}
+		casual={},
 	},
 
 	-- NOVALIS
 	aridia={
-		casual={}
+		casual={},
 	},
 	kerwan={
-		casual={}
+		casual={},
 	},
 
 	-- ARIDIA
 	sonic_summoner={
-		casual={}
+		casual={id.zoomerator},
 	},
 	trespasser={
-		casual={id.swingshot}
+		casual={id.swingshot},
+		ilj={id.heli_pack},
+		sinaflip={id.heli_pack},
+		isf={id.thruster_pack},
 	},
 	hoverboard={
-		casual={}
+		casual={},
 	},
 
 	-- KERWAN
 	eudora={
 		casual_heli={id.heli_pack},
-        casual_thruster={id.thruster_pack}
+        casual_thruster={id.thruster_pack},
+		packless={},
 	},
 	heli_pack={
-		casual={}
+		casual={},
 	},
 	swingshot={
-		casual={}
+		casual={},
 	},
 
 	-- EUDORA
 	blarg={
 		casual_heli={id.heli_pack, id.swingshot, id.trespasser},
-        casual_thruster={id.thruster_pack, id.swingshot, id.trespasser}
+        casual_thruster={id.thruster_pack, id.swingshot, id.trespasser},
+		packless={},
+		si_heli={id.heli_pack},
+		skip_thruster={id.thruster_pack},
+		--decoy={id.decoy_glove}
 	},
 
 	-- RILGAR
 	umbris={
 		casual_heli={id.heli_pack, id.swingshot, id.hydrodisplacer},
-        casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer}
+        casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer},
+		packless={},
+		sinaflip={id.heli_pack},
+		ilj={id.heli_pack},
+		isf={id.thruster_pack},
 	},
 	zoomerator={
-		casual_heli={id.heli_pack},
-        casual_thruster={id.thruster_pack}
+		casual_heli={id.heli_pack, id.hoverboard},
+        casual_thruster={id.thruster_pack, id.hoverboard},
+		packless_hoverboard={id.hoverboard},
+		--packless_clip={id.decoy_glove},
 	},
 
 	-- BLARG
 	rilgar={
-		casual={}
+		casual={},
 	},
 	hydrodisplacer={
-		casual={id.trespasser}
+		casual={id.trespasser},
+		skip_heli = {id.heli_pack},
+		skip_thruster = {id.thruster_pack},
+		--decoy={id.decoy_glove},
 	},
 	grindboots={
-		casual={id.swingshot}
+		casual={id.swingshot},
 	},
 
 	-- UMBRIS
 	batalia={
 		casual_heli={id.heli_pack, id.swingshot, id.hydrodisplacer},
-        casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer}
+        casual_thruster={id.thruster_pack, id.swingshot, id.hydrodisplacer},
+		packless={id.swingshot},
+		ilj={id.heli_pack},
+		sinaflip={id.heli_pack},
+		isf={id.thruster_pack},
 	},
 
 	-- BATALIA
 	gaspar={
-		casual={id.grindboots}
+		casual={id.grindboots},
+		si_heli={id.heli_pack},
 	},
 	orxon={
-		casual={}
+		casual={},
 	},
 	metal_detector={
-		casual={id.magneboots}
+		casual={id.magneboots},
+		gpc={id.thruster_pack},
+		tplj={id.thruster_pack},
+		skip_heli={id.heli_pack},
+		skip_thruster={id.thruster_pack},
 	},
 
 	-- GASPAR
 	pilots_helmet={
-		casual={}
+		casual={},
 	},
 
 	-- ORXON
 	pokitaru={
-		casual={}
+		casual={},
 	},
 	hoven={
-		casual_heli={id.heli_pack, id.swingshot, id.magneboots},
-        casual_thruster={id.thruster_pack, id.swingshot, id.magneboots}
+		casual_heli={id.heli_pack, id.o2_mask, id.swingshot, id.magneboots},
+        casual_thruster={id.thruster_pack, id.o2_mask, id.swingshot, id.magneboots},
+		magnewalk_heli={id.heli_pack, id.o2_mask, id.magneboots},
+		magnewalk_thruster={id.thruster_pack, id.o2_mask, id.magneboots},
+		--packless={id.decoy_glove, id.swingshot, id.magneboots},
 	},
 	magneboots={
-		casual={}
+		casual={},
 	},
 	premium_nanotech={
 		casual_heli={id.heli_pack, id.o2_mask},
-		casual_thruster={id.thruster_pack, id.o2_mask}
+		casual_thruster={id.thruster_pack, id.o2_mask},
+		clank_clip={},
+		--decoy={id.decoy_glove},
 	},
 	ultra_nanotech={
 		casual_heli={id.heli_pack, id.o2_mask, id.premium_nanotech},
-		casual_thruster={id.thruster_pack, id.o2_mask, id.premium_nanotech}
+		casual_thruster={id.thruster_pack, id.o2_mask, id.premium_nanotech},
+		clank_clip={id.premium_nanotech},
+		--decoy={id.decoy_glove},
 	},
 
 	-- POKITARU
 	thruster_pack={
-		casual={}
+		casual={},
 	},
 	o2_mask={
-		casual={id.thruster_pack, id.pilots_helmet}
+		casual={id.thruster_pack, id.pilots_helmet},
+		--decoy={id.decoy_glove, id.pilots_helmet},
 	},
 	persuader={
-		casual={id.hydrodisplacer, id.trespasser, id.raritanium}
+		casual={id.hydrodisplacer, id.trespasser, id.raritanium},
+		skip_hydro={id.hydro_pack, id.o2_mask, id.raritanium},
+		--decoy={id.decoy_glove, id.trespasser, id.raritanium},
 	},
 
 	-- HOVEN
 	gemlik={
-		casual={}
+		casual={},
 	},
 	hydro_pack={
-		casual={id.hydrodisplacer}
+		casual={id.hydrodisplacer},
+		sinaflip={id.heli_pack},
+		ilj={id.heli_pack},
+		isf={id.thruster_pack},
 	},
 	raritanium={
 		casual_heli={id.heli_pack, id.swingshot},
-		casual_thruster={id.thruster_pack, id.swingshot}
+		casual_thruster={id.thruster_pack, id.swingshot},
+		sinaflip={id.heli_pack},
+		ilj={id.heli_pack},
+		isf={id.thruster_pack},
 	},
 
 	-- GEMLIK
 	oltanis={
-		casual={id.swingshot, id.trespasser, id.magneboots}
+		casual={id.swingshot, id.trespasser, id.magneboots},
+		skip_thruster={id.thruster_pack},
+		--decoy{id.decoy_glove, id.swingshot, id.magneboots},
 	},
 
 	-- OLTANIS
 	quartu={
-		casual={id.grindboots}
+		casual={id.grindboots},
+		magnewalk={id.magneboots},
 	},
 	pda={
-		casual={id.magneboots}
+		casual={id.magneboots},
 	},
 
 	-- QUARTU
 	kalebo={
-		casual={id.swingshot}
+		casual={id.swingshot},
+		nlj={id.heli_pack},
+		tplj={id.thruster_pack},
 	},
 	fleet={
-		casual={id.thruster_pack, id.swingshot, id.hologuise}
+		casual={id.thruster_pack, id.swingshot, id.hologuise},
+		--decoy_heli={id.heli_pack, id.decoy_glove},
+		--decoy_thruster={id.thruster_pack, id.decoy_glove},
 	},
 	bolt_grabber={
-		casual={id.hydro_pack, id.o2_mask}
+		casual={id.hydro_pack, id.o2_mask},
+		si_heli={id.heli_pack},
 	},
 
 	-- KALEBO
 	hologuise={
 		casual_heli={id.heli_pack, id.swingshot, id.grindboots, id.hoverboard},
-        casual_thruster={id.thruster_pack, id.swingshot, id.grindboots, id.hoverboard}
+        casual_thruster={id.thruster_pack, id.swingshot, id.grindboots, id.hoverboard},
+		skip_heli={id.heli_pack, id.hoverboard},
+		skip_thruster={id.heli_pack, id.hoverboard},
+		--decoy={id.decoy_glove, id.hoverboard},
 	},
 	map_o_matic={
-		casual={id.grindboots}
+		casual={id.grindboots},
 	},
 
 	-- FLEET
 	veldin={
-		casual={id.magneboots, id.hologuise}
+		casual={id.magneboots, id.hologuise},
+		skip_hololess={id.magneboots},
+		--decoy={id.decoy_glove},
 	},
 	codebot={
-		casual={id.hydro_pack, id.o2_mask}
+		casual={id.hydro_pack, id.o2_mask},
+		skip_clip={},
 	},
 
 }
@@ -242,7 +298,7 @@ function ActivateCategory(category, new_status)
 end
 
 
--- turn on selected strats
+-- this is where a settings menu would toggle values inside 'locations'
 local settings = {standard='casual', speedtech=''}
 ActivateCategory(settings.standard, true)
 
