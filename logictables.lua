@@ -26,6 +26,24 @@ local id = {
 	codebot=0x32,
 	premium_nanotech=0x34,
 	ultra_nanotech=0x35,
+-- vendor weapons
+	devastator=0xb,
+	visibomb=0xd,
+	taunter=0xe,
+	blaster=0xf,
+	pyrociter=0x10,
+	mine_glove=0x11,
+	walloper=0x12,
+	tesla_claw=0x13,
+	glove_of_doom=0x14,
+	drone_device=0x18,
+	decoy_glove=0x19,
+-- check weapons
+	bomb_glove=10,
+	--suck_cannon=,
+	morph_o_ray=0x15,
+	--ryno=,
+
 }
 -- infobot ids
 local idb = {
@@ -49,9 +67,14 @@ local idb = {
 	veldin=0x12,
 }
 
+-- explosive weapons: bomb glove, devastator, visibomb, ryno
+
 local strats = {
 	-- VELDIN 1
 	novalis={
+		casual={},
+	},
+	bomb_glove={
 		casual={},
 	},
 
@@ -60,6 +83,9 @@ local strats = {
 		casual={},
 	},
 	kerwan={
+		casual={},
+	},
+	pyrociter={
 		casual={},
 	},
 
@@ -89,15 +115,25 @@ local strats = {
 	swingshot={
 		casual={},
 	},
+	blaster={
+		casual={},
+	},
 
 	-- EUDORA
 	blarg={
 		casual_heli={id.heli_pack, id.swingshot, id.trespasser},
         casual_thruster={id.thruster_pack, id.swingshot, id.trespasser},
 		packless={},
-		si_heli={id.heli_pack},
+		skip_heli={id.heli_pack},
 		skip_thruster={id.thruster_pack},
-		--decoy={id.decoy_glove}
+		decoy={id.decoy_glove},
+	},
+	glove_of_doom={
+		casual={},
+	},
+	suck_cannon={
+		casual_heli={id.heli_pack},
+		casual_thruster={id.thruster_pack},
 	},
 
 	-- RILGAR
@@ -113,7 +149,13 @@ local strats = {
 		casual_heli={id.heli_pack, id.hoverboard},
         casual_thruster={id.thruster_pack, id.hoverboard},
 		packless_hoverboard={id.hoverboard},
-		--packless_clip={id.decoy_glove},
+		packless_clip={id.decoy_glove},
+	},
+	mine_glove={
+		casual={},
+	},
+	ryno={
+		casual={id.metal_detector},
 	},
 
 	-- BLARG
@@ -124,10 +166,13 @@ local strats = {
 		casual={id.trespasser},
 		skip_heli = {id.heli_pack},
 		skip_thruster = {id.thruster_pack},
-		--decoy={id.decoy_glove},
+		decoy={id.decoy_glove},
 	},
 	grindboots={
 		casual={id.swingshot},
+	},
+	taunter={
+		casual={},
 	},
 
 	-- UMBRIS
@@ -155,9 +200,15 @@ local strats = {
 		skip_heli={id.heli_pack},
 		skip_thruster={id.thruster_pack},
 	},
+	devastator={
+		casual={},
+	},
 
 	-- GASPAR
 	pilots_helmet={
+		casual={},
+	},
+	walloper={
 		casual={},
 	},
 
@@ -170,7 +221,7 @@ local strats = {
         casual_thruster={id.thruster_pack, id.o2_mask, id.swingshot, id.magneboots},
 		magnewalk_heli={id.heli_pack, id.o2_mask, id.magneboots},
 		magnewalk_thruster={id.thruster_pack, id.o2_mask, id.magneboots},
-		--packless={id.decoy_glove, id.swingshot, id.magneboots},
+		packless={id.decoy_glove, id.swingshot, id.magneboots},
 	},
 	magneboots={
 		casual={},
@@ -179,13 +230,16 @@ local strats = {
 		casual_heli={id.heli_pack, id.o2_mask},
 		casual_thruster={id.thruster_pack, id.o2_mask},
 		clank_clip={},
-		--decoy={id.decoy_glove},
+		decoy={id.decoy_glove},
 	},
 	ultra_nanotech={
 		casual_heli={id.heli_pack, id.o2_mask, id.premium_nanotech},
 		casual_thruster={id.thruster_pack, id.o2_mask, id.premium_nanotech},
 		clank_clip={id.premium_nanotech},
-		--decoy={id.decoy_glove},
+		decoy={id.decoy_glove},
+	},
+	visibomb={
+		casual={},
 	},
 
 	-- POKITARU
@@ -194,12 +248,15 @@ local strats = {
 	},
 	o2_mask={
 		casual={id.thruster_pack, id.pilots_helmet},
-		--decoy={id.decoy_glove, id.pilots_helmet},
+		decoy={id.decoy_glove, id.pilots_helmet},
 	},
 	persuader={
 		casual={id.hydrodisplacer, id.trespasser, id.raritanium},
 		skip_hydro={id.hydro_pack, id.o2_mask, id.raritanium},
-		--decoy={id.decoy_glove, id.trespasser, id.raritanium},
+		decoy={id.decoy_glove, id.trespasser, id.raritanium},
+	},
+	decoy_glove={
+		casual={},
 	},
 
 	-- HOVEN
@@ -219,12 +276,15 @@ local strats = {
 		ilj={id.heli_pack},
 		isf={id.thruster_pack},
 	},
+	drone_device={
+		casual={},
+	},
 
 	-- GEMLIK
 	oltanis={
-		casual={id.swingshot, id.trespasser, id.magneboots},
+		casual={id.swingshot, id.trespasser, id.magneboots}, -- visibomb
 		skip_thruster={id.thruster_pack},
-		--decoy{id.decoy_glove, id.swingshot, id.magneboots},
+		decoy={id.decoy_glove, id.swingshot, id.magneboots},
 	},
 
 	-- OLTANIS
@@ -235,6 +295,12 @@ local strats = {
 	pda={
 		casual={id.magneboots},
 	},
+	tesla_claw={
+		casual={},
+	},
+	morph_o_ray={
+		casual={id.swingshot},
+	},
 
 	-- QUARTU
 	kalebo={
@@ -244,8 +310,8 @@ local strats = {
 	},
 	fleet={
 		casual={id.thruster_pack, id.swingshot, id.hologuise},
-		--decoy_heli={id.heli_pack, id.decoy_glove},
-		--decoy_thruster={id.thruster_pack, id.decoy_glove},
+		decoy_heli={id.heli_pack, id.decoy_glove},
+		decoy_thruster={id.thruster_pack, id.decoy_glove},
 	},
 	bolt_grabber={
 		casual={id.hydro_pack, id.o2_mask},
@@ -258,7 +324,7 @@ local strats = {
         casual_thruster={id.thruster_pack, id.swingshot, id.grindboots, id.hoverboard},
 		skip_heli={id.heli_pack, id.hoverboard},
 		skip_thruster={id.heli_pack, id.hoverboard},
-		--decoy={id.decoy_glove, id.hoverboard},
+		decoy={id.decoy_glove, id.hoverboard},
 	},
 	map_o_matic={
 		casual={id.grindboots},
@@ -267,8 +333,8 @@ local strats = {
 	-- FLEET
 	veldin={
 		casual={id.magneboots, id.hologuise},
-		skip_hololess={id.magneboots},
-		--decoy={id.decoy_glove},
+		skip_hololess={id.magneboots}, -- explosives needed
+		decoy={id.decoy_glove},
 	},
 	codebot={
 		casual={id.hydro_pack, id.o2_mask},
