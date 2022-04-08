@@ -1,8 +1,9 @@
 require 'deepcopy'
 require 'io'
 require 'crc32'
--- require 'logictables'
-
+require 'logictables'
+--require 'printtable' -- this is for testing
+--[[ OLD TABLES
 items = {
     {id=2, name="Heli-pack", req_items={} },
     {id=3, name="Thruster-pack", req_items={} },
@@ -63,7 +64,7 @@ infobots = {
     {id=0x11, req_items={{3, 0xc, 0x1f}} },		-- Fleet infobot on Quartu
     {id=0x12, req_items={{0x1c,0x1f}} }			-- Veldin2 infobot on Fleet
 }
-
+]]
 planets = {
 	{id=1, name="Novalis", infobots={2,3}, items={0x10}},
 	{id=2, name="Aridia", infobots={},items={0x1e, 0x1a, 5}},
@@ -148,7 +149,7 @@ function ReplaceItem(item, replaced_item)
 		for index, planet in ipairs(planets) do
 			if InArray(planet.items, item) then
 				if replaced_item >= 0x30 then
-					print("YO WTF I'M WRITING ILLEGAL ITEM " .. replaced_item .. " TO VENDOR ITEM " .. item)
+					--print("YO WTF I'M WRITING ILLEGAL ITEM " .. replaced_item .. " TO VENDOR ITEM " .. item)
 				end
 			
 				Ratchetron:WriteMemory(GAME_PID, 0x737bf0 + (planet.id * 4), 4, inttobytes(replaced_item, 4))
@@ -189,7 +190,7 @@ function GetItemWithID(id)
 		end
 	end
 	
-	print("Couldn't find item: " .. id)
+	--print("Couldn't find item: " .. id)
 	
 	return -1
 end
@@ -202,7 +203,7 @@ function RemoveItem(tbl, id)
 		end
 	end
 	
-	print("Couldn't find item: " .. id)
+	--print("Couldn't find item: " .. id)
 	
 	return -1
 end
@@ -637,9 +638,9 @@ function Randomize(seed)
 		end
 		
 		--print("out_index: " .. out_index)
-		--for i, out in pairs(available_outs) do
-		--	print(i .. ": " .. out.planet .. " : " .. out.infobot.id)
-		--end
+		for i, out in pairs(available_outs) do
+			--print(i .. ": " .. out.planet .. " : " .. out.infobot.id)
+		end
 		
 		--print(available_outs[out_index].infobot.id .. " -> " .. found_planet.id)
 		
@@ -709,7 +710,7 @@ function Randomize(seed)
 	end
 	
 	if #remaining_items > 0 then
-		print("*************** Yo why are there " .. #remaining_items .. " items still not placed?")
+		--print("*************** Yo why are there " .. #remaining_items .. " items still not placed?")
 	end
 	
 	filewrite("}\n")
@@ -760,7 +761,7 @@ function OnLoad()
 		--print("")
 		seed = seed + 1
 	end
-	
+
 	print("* Done!")
 	
 	if (game.planet == 0) then
@@ -775,3 +776,5 @@ end
 function OnUnload()
 
 end
+
+OnLoad()

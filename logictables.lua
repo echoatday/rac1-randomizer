@@ -1,6 +1,3 @@
-require 'printtable'
-
-
 -- key item ids
 local id = {
 	heli_pack=2,
@@ -39,10 +36,10 @@ local id = {
 	drone_device=0x18,
 	decoy_glove=0x19,
 -- check weapons
-	bomb_glove=10,
-	--suck_cannon=,
+	bomb_glove=10, -- currently unused
+	suck_cannon=0x9,
 	morph_o_ray=0x15,
-	--ryno=,
+	ryno=0x17,
 
 }
 -- infobot ids
@@ -275,6 +272,7 @@ local strats = {
 		sinaflip={id.heli_pack},
 		ilj={id.heli_pack},
 		isf={id.thruster_pack},
+		packless={id.swingshot},
 	},
 	drone_device={
 		casual={},
@@ -282,7 +280,7 @@ local strats = {
 
 	-- GEMLIK
 	oltanis={
-		casual={id.swingshot, id.trespasser, id.magneboots}, -- visibomb
+		casual={id.swingshot, id.trespasser, id.magneboots, id.visibomb},
 		skip_thruster={id.thruster_pack},
 		decoy={id.decoy_glove, id.swingshot, id.magneboots},
 	},
@@ -366,88 +364,97 @@ end
 
 -- this is where a settings menu would toggle values inside 'locations'
 local settings = {standard='casual', speedtech=''}
-ActivateCategory(settings.standard, true)
+ActivateCategory(settings.speedtech, true)
 
 
 -- converts to main.lua's table format
 function ApplyReqs(local_table, id_type)
 	for check in ipairs(local_table) do			-- this empties all req_items fields
 		local_table[check].req_items = {}
-	end
+		
+		local spot = local_table[check].key
+		local empty_reqs = false
+		for option,status in pairs(locations[spot]) do
 
-	for check in ipairs(local_table) do			-- this fills all req_items fields from 'strats' according to 'locations'
-		for location,_ in pairs(locations) do
-			if local_table[check].id == id_type[location] then
-				for option,status in pairs(locations[location]) do
-					if status then
-						table.insert(local_table[check].req_items, strats[location][option])
-					end
-				end
+			if status then
+				table.insert(local_table[check].req_items, strats[spot][option])
+			end
+
+			if status and strats[spot][option][1] == nil then
+				empty_reqs = true
 			end
 		end
-	end
 
+		if empty_reqs == true then
+			local_table[check].req_items = {}
+		end
+	end
+	print('END')
 	return local_table
 end
 
 -- testing
-local items = {
-	{id=2, name="Heli-pack", req_items={} },
-	{id=3, name="Thruster-pack", req_items={} },
-	{id=4, name="Hydro-pack", req_items={{0x16}, {2}} },
-	{id=5, name="Sonic Summoner", req_items={{0x30}} },
-	{id=6, name="O2 Mask", req_items={{7}} },
-	{id=7, name="Pilot's Helmet", req_items={} },
-	{id=0xc, name="Swingshot", req_items={} },
-	{id=0x16, name="Hydrodisplacer", req_items={{0x1a}, {2}, {3}} },
-	{id=0x1a, name="Trespasser", req_items={{0xc}, {2}, {3}} },
-	{id=0x1b, name="MetalDetector", req_items={{0x1c}, {2}, {3}} },
-	{id=0x1c, name="Magneboots", req_items={} },
-	{id=0x1d, name="Grindboots", req_items={{0xc}, {2}, {3}} },
-	{id=0x1e, name="Hoverboard", req_items={} },
-	{id=0x1f, name="Hologuise", req_items={{0x1e}} },
-	{id=0x20, name="PDA", req_items={{0x1c}} },
-	{id=0x21, name="Map-O-Matic", req_items={{0x1d}} },
-	{id=0x22, name="Bolt Grabber", req_items={{4, 6}} },
-	{id=0x23, name="Persuader", req_items={{0x1a, 0x31}} },
-	{id=0x30, name="Zoomerator", req_items={{0x1e, 0x2}, {0x1e, 0x3}} },
-	{id=0x31, name="Raritanium", req_items={{0xc}, {3}, {2}} },
-	{id=0x32, name="Codebot", req_items={} },
-	{id=0x34, name="Premium Nanotech", req_items={{6, 2}, {6, 3}} },
-	{id=0x35, name="Ultra Nanotech", req_items={{6, 3, 0x34}, {6, 2, 0x34}} },
+local empty_items = {
+	{id=2, key='heli_pack', name="Heli-pack", req_items={} },
+    {id=3, key='thruster_pack', name="Thruster-pack", req_items={} },
+    {id=4, key='hydro_pack', name="Hydro-pack", req_items={{0x16}} },
+    {id=5, key='sonic_summoner', name="Sonic Summoner", req_items={{0x30}} },
+    {id=6, key='o2_mask', name="O2 Mask", req_items={{7}} },
+    {id=7, key='pilots_helmet', name="Pilot's Helmet", req_items={} },
+	{id=0x9, key='suck_cannon', name="Suck Cannon", req_items={{0x2}, {0x3}} },
+	{id=0xb, key='devastator', name="Devastator", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0xc, key='swingshot', name="Swingshot", req_items={} },
+	{id=0xd, key='visibomb', name="Visibomb", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0xe, key='taunter', name="Taunter", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0xf, key='blaster', name="Blaster", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x10, key='pyrociter', name="Pyrocitor", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x11, key='mine_glove', name="Mine Glove", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x12, key='walloper', name="Walloper", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x13, key='tesla_claw', name="Tesla Claw", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x14, key='glove_of_doom', name="Glove of Doom", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x15, key='morph_o_ray', name="Morph-O-Ray", req_items={{0xc}} },
+	{id=0x16, key='hydrodisplacer', name="Hydrodisplacer", req_items={{0x1a}} },
+	{id=0x17, key='ryno', name="R.Y.N.O.", req_items={{0x1b, 0x2}, {0x1b, 0x3}} },
+	{id=0x18, key='drone_device', name="Drone Device", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x19, key='decoy_glove', name="Decoy Glove", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
+	{id=0x1a, key='trespasser', name="Trespasser", req_items={{0xc}} },
+    {id=0x1b, key='metal_detector', name="MetalDetector", req_items={{0x1c}} },
+    {id=0x1c, key='magneboots', name="Magneboots", req_items={} },
+    {id=0x1d, key='grindboots', name="Grindboots", req_items={{0xc}} },
+    {id=0x1e, key='hoverboard', name="Hoverboard", req_items={} },
+    {id=0x1f, key='hologuise', name="Hologuise", req_items={{0x1e,2,0xc,0x1d},{0x1e,3,0xc,0x1d}} },
+    {id=0x20, key='pda', name="PDA", req_items={{0x1c}} },
+    {id=0x21, key='map_o_matic', name="Map-O-Matic", req_items={{0x1d}} },
+    {id=0x22, key='bolt_grabber', name="Bolt Grabber", req_items={{4, 6}} },
+    {id=0x23, key='persuader', name="Persuader", req_items={{0x1a, 0x31, 0x16}} },
+    {id=0x30, key='zoomerator', name="Zoomerator", req_items={{0x1e,2},{0x1e,3}} },
+    {id=0x31, key='raritanium', name="Raritanium", req_items={{0xc,2}, {0xc,3}} },
+    {id=0x32, key='codebot', name="Codebot", req_items={{4,6}} },
+    {id=0x34, key='premium_nanotech', name="Premium Nanotech", req_items={{6, 2}, {6, 3}} },
+    {id=0x35, key='ultra_nanotech', name="Ultra Nanotech", req_items={{6, 3, 0x34, 0x1b}, {6, 2, 0x34, 0x1b} }},
 }
 
-local infobots = {
-	{id=1, req_items={} },  						-- Novalis "infobot" on Veldin1
-	{id=2, req_items={} },  						-- Aridia infobot on Novalis
-	{id=3, req_items={} },  						-- Kerwan infobot on Novalis 
-	{id=4, req_items={{2}, {3}} }, 					-- Eudora infobot on Kerwan
-	{id=5, req_items={} },							-- Rilgar infobot on Blarg
-	{id=6, req_items={{2}, {3}} },  				-- Blarg infobot on Eudora
-	{id=7, req_items={{0xc}, {2}, {3}} },			-- Umbris infobot on Rilgar
-	{id=8, req_items={{0xc}, {2}} },				-- Batalia infobot on Umbris
-	{id=9, req_items={{0x1d}, {2}} },				-- Gaspar infobot on Batalia
-	{id=10, req_items={} },							-- Orxon infobot on Batalia
-	{id=0xb, req_items={} },						-- Pokitaru infobot on Orxon
-	{id=0xc, req_items={{6, 2}, {6, 3}} },			-- Hoven infobot on Orxon
-	{id=0xd, req_items={} },						-- Gemlik infobot on Hoven
-	{id=0xe, req_items={{0xc, 0x1c, 0x1a}, {3}} }, 	-- Oltanis infobot on Gemlik
-	{id=0xf, req_items={{0x1c}} },					-- Quartu infobot on Oltanis
-	{id=0x10, req_items={{2}, {3}, {0xc}} },		-- KaleboIII infobot on Quartu
-	{id=0x11, req_items={{3, 0xc}} },				-- Fleet infobot on Quartu
-	{id=0x12, req_items={{3}, {0x1c, 0x1f}} }		-- Veldin2 infobot on Fleet
+local empty_infobots = {
+	{id=1, key='novalis', req_items={} },				-- Novalis "infobot" on Veldin1
+    {id=2, key='aridia', req_items={} },				-- Aridia infobot on Novalis
+    {id=3, key='kerwan', req_items={} },				-- Kerwan infobot on Novalis 
+    {id=4, key='eudora', req_items={{2}, {3}} },			-- Eudora infobot on Kerwan
+    {id=5, key='rilgar', req_items={} },				-- Rilgar infobot on Blarg
+    {id=6, key='blarg', req_items={{0x1a,0xc,2}, {0x1a, 0xc, 3}}},	-- Blarg infobot on Eudora
+    {id=7, key='umbris', req_items={{0xc,0x16}}},			-- Umbris infobot on Rilgar
+    {id=8, key='batalia', req_items={{0xc,0x16}}},			-- Batalia infobot on Umbris
+    {id=9, key='gaspar', req_items={{0x1d}} },			-- Gaspar infobot on Batalia
+    {id=10, key='orxon', req_items={} },				-- Orxon infobot on Batalia
+    {id=0xb, key='pokitaru', req_items={} },				-- Pokitaru infobot on Orxon
+    {id=0xc, key='hoven', req_items={{6,0xc,0x1c, 3}} },		-- Hoven infobot on Orxon
+    {id=0xd, key='gemlik', req_items={} },				-- Gemlik infobot on Hoven
+    {id=0xe, key='oltanis', req_items={{0xc, 0x1c, 0x1a}} },		-- Oltanis infobot on Gemlik
+    {id=0xf, key='quartu', req_items={{0x1d}} }, 			-- Quartu infobot on Oltanis
+    {id=0x10, key='kalebo', req_items={{0xc}} },    			-- KaleboIII infobot on Quartu
+    {id=0x11, key='fleet', req_items={{3, 0xc, 0x1f}} },		-- Fleet infobot on Quartu
+    {id=0x12, key='veldin', req_items={{0x1c,0x1f}} }			-- Veldin2 infobot on Fleet
 }
 
 
-items = ApplyReqs(items, id)
-infobots = ApplyReqs(infobots, idb)
-
-
---test
-print('ITEMS')
-PrintTable(items)
-print('INFOBOTS')
-PrintTable(infobots)
-print('Done!')
--- hey, it prints!
--- still breaks racman, though
+items = ApplyReqs(empty_items, id)
+infobots = ApplyReqs(empty_infobots, idb)
