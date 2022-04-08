@@ -361,31 +361,25 @@ function ActivateCategory(category, new_status)
 	end
 end
 
-
--- this is where a settings menu would toggle values inside 'locations'
-local settings = {standard='casual', speedtech=''}
-ActivateCategory(settings.speedtech, true)
-
-
 -- converts to main.lua's table format
-function ApplyReqs(local_table, id_type)
-	for check in ipairs(local_table) do			-- this empties all req_items fields
-		local_table[check].req_items = {}
+function ApplyReqs(local_table)
+	for check in ipairs(local_table) do							
+		local_table[check].req_items = {}						-- empty req_items first
 		
 		local spot = local_table[check].key
 		local empty_reqs = false
 		for option,status in pairs(locations[spot]) do
 
-			if status then
+			if status then										-- add in strat requirements if activated
 				table.insert(local_table[check].req_items, strats[spot][option])
 			end
 
-			if status and strats[spot][option][1] == nil then
+			if status and strats[spot][option][1] == nil then 	-- if we put an empty set in the requirements, prepare to purge
 				empty_reqs = true
 			end
 		end
 
-		if empty_reqs == true then
+		if empty_reqs == true then 								-- purge mode
 			local_table[check].req_items = {}
 		end
 	end
@@ -393,7 +387,15 @@ function ApplyReqs(local_table, id_type)
 	return local_table
 end
 
--- testing
+-- this is where a settings menu would toggle values inside 'locations'
+local settings = {standard='casual', speedtech='', criminal='skip'}
+ActivateCategory(settings.standard, true)
+ActivateCategory(settings.criminal, true)
+
+
+
+-- the final touches
+
 local empty_items = {
 	{id=2, key='heli_pack', name="Heli-pack", req_items={} },
     {id=3, key='thruster_pack', name="Thruster-pack", req_items={} },
@@ -455,6 +457,5 @@ local empty_infobots = {
     {id=0x12, key='veldin', req_items={{0x1c,0x1f}} }			-- Veldin2 infobot on Fleet
 }
 
-
-items = ApplyReqs(empty_items, id)
-infobots = ApplyReqs(empty_infobots, idb)
+items = ApplyReqs(empty_items)
+infobots = ApplyReqs(empty_infobots)
