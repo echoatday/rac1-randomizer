@@ -26,6 +26,9 @@ To make a set seed, make a text file named `seed.txt` in RaCMAN's root folder (t
 
 Add `# graph: false` to the top of the `seed.txt` file to disable debug graph generation. By design, this changes the seed so a seed file with and without `# graph: false` are different, regardless of wether anything else in the file is the same. 
 
+## Difficulty settings
+Currently, difficulty is hard-coded in `logictables.lua` at line 390. By default on this version it has all casual strats enabled, as well as strats labeled 'skip', which are generally oob jumps or other crimes that do not require difficult tech. This feature is a work in progress.
+
 ## What does it do?
 - Infobots and weapons/items/gadgets are randomized.
 	- You always get infobots where you get infobots, and always weapons/items/gadgets where you get those. So there are two randomized pools. 

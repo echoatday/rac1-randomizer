@@ -392,6 +392,14 @@ local settings = {standard='casual', speedtech='', criminal='skip'}
 ActivateCategory(settings.standard, true)
 ActivateCategory(settings.criminal, true)
 
+-- Feature Zone
+-- - GUI window to toggle pre-existing categories before randomization
+-- - Tech sub-categories to improve `speedtech` setting (eg. `magnewalk`, `ilj`, `packless`)
+-- - Advanced menu to toggle individual settings for custom difficulty levels
+-- - Save custom difficulty to a personal `locations` table that can be loaded
+-- - View and/or set seed in the GUI
+-- - Shareable settings & seed string for races
+
 
 
 -- the final touches
