@@ -1,70 +1,4 @@
--- key item ids
-local id = {
-	heli_pack=2,
-	thruster_pack=3,
-	hydro_pack=4,
-	sonic_summoner=5,
-	o2_mask=6,
-	pilots_helmet=7,
-	swingshot=0xc,
-	hydrodisplacer=0x16,
-	trespasser=0x1a,
-	metal_detector=0x1b,
-	magneboots=0x1c,
-	grindboots=0x1d,
-	hoverboard=0x1e,
-	hologuise=0x1f,
-	pda=0x20,
-	map_o_matic=0x21,
-	bolt_grabber=0x22,
-	persuader=0x23,
-	zoomerator=0x30,
-	raritanium=0x31,
-	codebot=0x32,
-	premium_nanotech=0x34,
-	ultra_nanotech=0x35,
--- vendor weapons
-	devastator=0xb,
-	visibomb=0xd,
-	taunter=0xe,
-	blaster=0xf,
-	pyrociter=0x10,
-	mine_glove=0x11,
-	walloper=0x12,
-	tesla_claw=0x13,
-	glove_of_doom=0x14,
-	drone_device=0x18,
-	decoy_glove=0x19,
--- check weapons
-	bomb_glove=10, -- currently unused
-	suck_cannon=0x9,
-	morph_o_ray=0x15,
-	ryno=0x17,
-
-}
--- infobot ids
-local idb = {
-	novalis=1,
-	aridia=2,
-	kerwan=3,
-	eudora=4,
-	rilgar=5,
-	blarg=6,
-	umbris=7,
-	batalia=8,
-	gaspar=9,
-	orxon=10,
-	pokitaru=0xb,
-	hoven=0xc,
-	gemlik=0xd,
-	oltanis=0xe,
-	quartu=0xf,
-	kalebo=0x10,
-	fleet=0x11,
-	veldin=0x12,
-}
-
--- explosive weapons: bomb glove, devastator, visibomb, ryno
+require 'tables_id'
 
 local strats = {
 	-- VELDIN 1
@@ -185,7 +119,7 @@ local strats = {
 	-- BATALIA
 	gaspar={
 		casual={id.grindboots},
-		si_heli={id.heli_pack},
+		slope_heli={id.heli_pack},
 	},
 	orxon={
 		casual={},
@@ -313,7 +247,7 @@ local strats = {
 	},
 	bolt_grabber={
 		casual={id.hydro_pack, id.o2_mask},
-		si_heli={id.heli_pack},
+		slope_heli={id.heli_pack},
 	},
 
 	-- KALEBO
@@ -383,23 +317,37 @@ function ApplyReqs(local_table)
 			local_table[check].req_items = {}
 		end
 	end
-	print('END')
 	return local_table
 end
 
--- this is where a settings menu would toggle values inside 'locations'
-local settings = {standard='casual', speedtech='', criminal='skip'}
-ActivateCategory(settings.standard, true)
-ActivateCategory(settings.criminal, true)
 
--- Feature Zone
--- - GUI window to toggle pre-existing categories before randomization
--- - Tech sub-categories to improve `speedtech` setting (eg. `magnewalk`, `ilj`, `packless`)
--- - Advanced menu to toggle individual settings for custom difficulty levels
--- - Save custom difficulty to a personal `locations` table that can be loaded
--- - View and/or set seed in the GUI
--- - Shareable settings & seed string for races
+-- refer to random_settings.lua
+local settings = {
+	standard='casual',
+-- miscellaneous
+	skips='skip',
+	packless='packless',
+	decoy_clips='decoy',
+	magnewalk='magnewalk',
+-- thruster-pack movement
+	infinite_side_flips='isf',
+	ground_pound_cancels='gpc',
+	thruster_pack_long_jump='tplj',
+-- heli-pack movement
+	infinite_long_jumps='ilj',
+	sinaflips='sinaflip',
+	slope_intercept='slope',
+	neutral_long_jumps='nlj',
+}
 
+if config.speedtech == true then
+	for k,_ in pairs(settings) do
+		ActivateCategory(settings.k, config.k)
+	end
+else
+	ActivateCategory('', false)
+end
+ActivateCategory(settings.standard, true) -- always enable casual strats
 
 
 -- the final touches
@@ -407,11 +355,11 @@ ActivateCategory(settings.criminal, true)
 local empty_items = {
 	{id=2, key='heli_pack', name="Heli-pack", req_items={} },
     {id=3, key='thruster_pack', name="Thruster-pack", req_items={} },
-    {id=4, key='hydro_pack', name="Hydro-pack", req_items={{0x16}} },
-    {id=5, key='sonic_summoner', name="Sonic Summoner", req_items={{0x30}} },
-    {id=6, key='o2_mask', name="O2 Mask", req_items={{7}} },
+    {id=4, key='hydro_pack', name="Hydro-pack", req_items={} },
+    {id=5, key='sonic_summoner', name="Sonic Summoner", req_items={} },
+    {id=6, key='o2_mask', name="O2 Mask", req_items={} },
     {id=7, key='pilots_helmet', name="Pilot's Helmet", req_items={} },
-	{id=0x9, key='suck_cannon', name="Suck Cannon", req_items={{0x2}, {0x3}} },
+	{id=0x9, key='suck_cannon', name="Suck Cannon", req_items={} },
 	{id=0xb, key='devastator', name="Devastator", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
 	{id=0xc, key='swingshot', name="Swingshot", req_items={} },
 	{id=0xd, key='visibomb', name="Visibomb", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
@@ -422,47 +370,47 @@ local empty_items = {
 	{id=0x12, key='walloper', name="Walloper", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
 	{id=0x13, key='tesla_claw', name="Tesla Claw", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
 	{id=0x14, key='glove_of_doom', name="Glove of Doom", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x15, key='morph_o_ray', name="Morph-O-Ray", req_items={{0xc}} },
-	{id=0x16, key='hydrodisplacer', name="Hydrodisplacer", req_items={{0x1a}} },
-	{id=0x17, key='ryno', name="R.Y.N.O.", req_items={{0x1b, 0x2}, {0x1b, 0x3}} },
+	{id=0x15, key='morph_o_ray', name="Morph-O-Ray", req_items={} },
+	{id=0x16, key='hydrodisplacer', name="Hydrodisplacer", req_items={} },
+	{id=0x17, key='ryno', name="R.Y.N.O.", req_items={} },
 	{id=0x18, key='drone_device', name="Drone Device", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
 	{id=0x19, key='decoy_glove', name="Decoy Glove", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x1a, key='trespasser', name="Trespasser", req_items={{0xc}} },
-    {id=0x1b, key='metal_detector', name="MetalDetector", req_items={{0x1c}} },
+	{id=0x1a, key='trespasser', name="Trespasser", req_items={} },
+    {id=0x1b, key='metal_detector', name="MetalDetector", req_items={} },
     {id=0x1c, key='magneboots', name="Magneboots", req_items={} },
-    {id=0x1d, key='grindboots', name="Grindboots", req_items={{0xc}} },
+    {id=0x1d, key='grindboots', name="Grindboots", req_items={} },
     {id=0x1e, key='hoverboard', name="Hoverboard", req_items={} },
-    {id=0x1f, key='hologuise', name="Hologuise", req_items={{0x1e,2,0xc,0x1d},{0x1e,3,0xc,0x1d}} },
-    {id=0x20, key='pda', name="PDA", req_items={{0x1c}} },
-    {id=0x21, key='map_o_matic', name="Map-O-Matic", req_items={{0x1d}} },
-    {id=0x22, key='bolt_grabber', name="Bolt Grabber", req_items={{4, 6}} },
-    {id=0x23, key='persuader', name="Persuader", req_items={{0x1a, 0x31, 0x16}} },
-    {id=0x30, key='zoomerator', name="Zoomerator", req_items={{0x1e,2},{0x1e,3}} },
-    {id=0x31, key='raritanium', name="Raritanium", req_items={{0xc,2}, {0xc,3}} },
-    {id=0x32, key='codebot', name="Codebot", req_items={{4,6}} },
-    {id=0x34, key='premium_nanotech', name="Premium Nanotech", req_items={{6, 2}, {6, 3}} },
-    {id=0x35, key='ultra_nanotech', name="Ultra Nanotech", req_items={{6, 3, 0x34, 0x1b}, {6, 2, 0x34, 0x1b} }},
+    {id=0x1f, key='hologuise', name="Hologuise", req_items={} },
+    {id=0x20, key='pda', name="PDA", req_items={} },
+    {id=0x21, key='map_o_matic', name="Map-O-Matic", req_items={} },
+    {id=0x22, key='bolt_grabber', name="Bolt Grabber", req_items={} },
+    {id=0x23, key='persuader', name="Persuader", req_items={} },
+    {id=0x30, key='zoomerator', name="Zoomerator", req_items={} },
+    {id=0x31, key='raritanium', name="Raritanium", req_items={} },
+    {id=0x32, key='codebot', name="Codebot", req_items={} },
+    {id=0x34, key='premium_nanotech', name="Premium Nanotech", req_items={} },
+    {id=0x35, key='ultra_nanotech', name="Ultra Nanotech", req_items={} },
 }
 
 local empty_infobots = {
 	{id=1, key='novalis', req_items={} },				-- Novalis "infobot" on Veldin1
     {id=2, key='aridia', req_items={} },				-- Aridia infobot on Novalis
     {id=3, key='kerwan', req_items={} },				-- Kerwan infobot on Novalis 
-    {id=4, key='eudora', req_items={{2}, {3}} },			-- Eudora infobot on Kerwan
+    {id=4, key='eudora', req_items={} },				-- Eudora infobot on Kerwan
     {id=5, key='rilgar', req_items={} },				-- Rilgar infobot on Blarg
-    {id=6, key='blarg', req_items={{0x1a,0xc,2}, {0x1a, 0xc, 3}}},	-- Blarg infobot on Eudora
-    {id=7, key='umbris', req_items={{0xc,0x16}}},			-- Umbris infobot on Rilgar
-    {id=8, key='batalia', req_items={{0xc,0x16}}},			-- Batalia infobot on Umbris
-    {id=9, key='gaspar', req_items={{0x1d}} },			-- Gaspar infobot on Batalia
+    {id=6, key='blarg', req_items={} },					-- Blarg infobot on Eudora
+    {id=7, key='umbris', req_items={} },				-- Umbris infobot on Rilgar
+    {id=8, key='batalia', req_items={} },				-- Batalia infobot on Umbris
+    {id=9, key='gaspar', req_items={} },				-- Gaspar infobot on Batalia
     {id=10, key='orxon', req_items={} },				-- Orxon infobot on Batalia
-    {id=0xb, key='pokitaru', req_items={} },				-- Pokitaru infobot on Orxon
-    {id=0xc, key='hoven', req_items={{6,0xc,0x1c, 3}} },		-- Hoven infobot on Orxon
+    {id=0xb, key='pokitaru', req_items={} },			-- Pokitaru infobot on Orxon
+    {id=0xc, key='hoven', req_items={} },				-- Hoven infobot on Orxon
     {id=0xd, key='gemlik', req_items={} },				-- Gemlik infobot on Hoven
-    {id=0xe, key='oltanis', req_items={{0xc, 0x1c, 0x1a}} },		-- Oltanis infobot on Gemlik
-    {id=0xf, key='quartu', req_items={{0x1d}} }, 			-- Quartu infobot on Oltanis
-    {id=0x10, key='kalebo', req_items={{0xc}} },    			-- KaleboIII infobot on Quartu
-    {id=0x11, key='fleet', req_items={{3, 0xc, 0x1f}} },		-- Fleet infobot on Quartu
-    {id=0x12, key='veldin', req_items={{0x1c,0x1f}} }			-- Veldin2 infobot on Fleet
+    {id=0xe, key='oltanis', req_items={} },				-- Oltanis infobot on Gemlik
+    {id=0xf, key='quartu', req_items={} }, 				-- Quartu infobot on Oltanis
+    {id=0x10, key='kalebo', req_items={} },    			-- KaleboIII infobot on Quartu
+    {id=0x11, key='fleet', req_items={} },				-- Fleet infobot on Quartu
+    {id=0x12, key='veldin', req_items={} }				-- Veldin2 infobot on Fleet
 }
 
 items = ApplyReqs(empty_items)

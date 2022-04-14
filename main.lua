@@ -1,70 +1,10 @@
 require 'deepcopy'
 require 'io'
 require 'crc32'
-require 'logictables'
---require 'printtable' -- this is for testing
---[[ OLD TABLES
-items = {
-    {id=2, name="Heli-pack", req_items={} },
-    {id=3, name="Thruster-pack", req_items={} },
-    {id=4, name="Hydro-pack", req_items={{0x16}} },
-    {id=5, name="Sonic Summoner", req_items={{0x30}} },
-    {id=6, name="O2 Mask", req_items={{7}} },
-    {id=7, name="Pilot's Helmet", req_items={} },
-	{id=0x9, name="Suck Cannon", req_items={{0x2}, {0x3}} },
-	{id=0xb, name="Devastator", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0xc, name="Swingshot", req_items={} },
-	{id=0xd, name="Visibomb", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0xe, name="Taunter", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0xf, name="Blaster", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x10, name="Pyrocitor", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x11, name="Mine Glove", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x12, name="Walloper", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x13, name="Tesla Claw", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x14, name="Glove of Doom", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x15, name="Morph-O-Ray", req_items={{0xc}} },
-	{id=0x16, name="Hydrodisplacer", req_items={{0x1a}} },
-	{id=0x17, name="R.Y.N.O.", req_items={{0x1b, 0x2}, {0x1b, 0x3}} },
-	{id=0x18, name="Drone Device", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x19, name="Decoy Glove", req_items={}, ill_items={0x30, 0x31, 0x32, 0x34, 0x35} },
-	{id=0x1a, name="Trespasser", req_items={{0xc}} },
-    {id=0x1b, name="MetalDetector", req_items={{0x1c}} },
-    {id=0x1c, name="Magneboots", req_items={} },
-    {id=0x1d, name="Grindboots", req_items={{0xc}} },
-    {id=0x1e, name="Hoverboard", req_items={} },
-    {id=0x1f, name="Hologuise", req_items={{0x1e,2,0xc,0x1d},{0x1e,3,0xc,0x1d}} },
-    {id=0x20, name="PDA", req_items={{0x1c}} },
-    {id=0x21, name="Map-O-Matic", req_items={{0x1d}} },
-    {id=0x22, name="Bolt Grabber", req_items={{4, 6}} },
-    {id=0x23, name="Persuader", req_items={{0x1a, 0x31, 0x16}} },
-    {id=0x30, name="Zoomerator", req_items={{0x1e,2},{0x1e,3}} },
-    {id=0x31, name="Raritanium", req_items={{0xc,2}, {0xc,3}} },
-    {id=0x32, name="Codebot", req_items={{4,6}} },
-    {id=0x34, name="Premium Nanotech", req_items={{6, 2}, {6, 3}} },
-    {id=0x35, name="Ultra Nanotech", req_items={{6, 3, 0x34, 0x1b}, {6, 2, 0x34, 0x1b} }},
-}
+config = require 'randomizer_settings'
+require 'tables_id'
+require 'tables_logic'
 
-infobots = {
-    {id=1, req_items={} },				-- Novalis "infobot" on Veldin1
-    {id=2, req_items={} },				-- Aridia infobot on Novalis
-    {id=3, req_items={} },				-- Kerwan infobot on Novalis 
-    {id=4, req_items={{2}, {3}} },			-- Eudora infobot on Kerwan
-    {id=5, req_items={} },				-- Rilgar infobot on Blarg
-    {id=6, req_items={{0x1a,0xc,2}, {0x1a, 0xc, 3}}},	-- Blarg infobot on Eudora
-    {id=7, req_items={{0xc,0x16}}},			-- Umbris infobot on Rilgar
-    {id=8, req_items={{0xc,0x16}}},			-- Batalia infobot on Umbris
-    {id=9, req_items={{0x1d}} },			-- Gaspar infobot on Batalia
-    {id=10, req_items={} },				-- Orxon infobot on Batalia
-    {id=0xb, req_items={} },				-- Pokitaru infobot on Orxon
-    {id=0xc, req_items={{6,0xc,0x1c, 3}} },		-- Hoven infobot on Orxon
-    {id=0xd, req_items={} },				-- Gemlik infobot on Hoven
-    {id=0xe, req_items={{0xc, 0x1c, 0x1a}} },		-- Oltanis infobot on Gemlik
-    {id=0xf, req_items={{0x1d}} }, 			-- Quartu infobot on Oltanis
-    {id=0x10, req_items={{0xc}} },    			-- KaleboIII infobot on Quartu
-    {id=0x11, req_items={{3, 0xc, 0x1f}} },		-- Fleet infobot on Quartu
-    {id=0x12, req_items={{0x1c,0x1f}} }			-- Veldin2 infobot on Fleet
-}
-]]
 planets = {
 	{id=1, name="Novalis", infobots={2,3}, items={0x10}},
 	{id=2, name="Aridia", infobots={},items={0x1e, 0x1a, 5}},
@@ -739,18 +679,15 @@ function OnLoad()
 	memset(0xb00000, 0, 0x300)
 	
 	local seed = os.time()
-	
-	local seed_file = io.open("seed.txt", "r")
-	if seed_file ~= nil then
-		local seed_text = seed_file:read("*a*")
-		
-		seed = LibDeflate:Crc32(trim1(seed_text), 0)
-		
-		if string.find(seed_text:gsub("%s+", ""), "#graph:false") then
-			write_debug_graph = false
-		end
-	
-		seed_file:close()
+
+	-- check config file for seed
+	if config.seed ~= "none" and type(config.seed) == "string" then
+		seed = config.seed
+	end
+
+	-- check config file for graph setting
+	if config.graph == false then
+		write_debug_graph = false
 	end
 	
 	-- Repeatedly generate new path until it works. Bad code makes generation hard
