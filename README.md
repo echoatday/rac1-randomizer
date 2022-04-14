@@ -14,7 +14,7 @@ Item tracker for EmoTracker is available, courtesy of Myth197 and DukeDragon28.
 ## Installation
 A homebrew enabled PS3 with WebMAN is required. Then use [RaCMAN](https://github.com/MichaelRelaxen/racman).  
 
-When you have RacMAN working, attach it to the game, go to "Patches loader..." in the top-left menu, then choose "Add ZIP..." and find the randomizer.zip download. Then just enable it in the mod menu. 
+When you have RacMAN working, copy the contents of rac1-randomizer-a.zip to your root RacMAN folder (where 'racman.exe' is). Then just enable it in the mod menu.
 
 You can enable the mod at any time and then start a new game, or start a new game and then enable the mod, both work just fine. If you collect any items with the mod on and you want to restart, you should disable the mod and enable it again. 
 
@@ -22,7 +22,7 @@ You can enable the mod at any time and then start a new game, or start a new gam
 To fully disable the randomizer you need to quit the game and start it up again. The mod doesn't fully clean up after itself when it's being unloaded yet. 
 
 ## Randomizer settings
-To change the settings for this version of the randomizer. open 'random_settings.lua' inside the mod's folder (RaCMAN\mods\NPEA00385\randomizer) using notepad or another text editor. The 'seed' and 'graph' options replace the old seed.txt functionality. 
+To change the settings for this version of the randomizer. open 'random_settings.lua' inside your root RacMAN folder using notepad or another text editor. The 'seed' and 'graph' options replace the old seed.txt functionality. 
 
 The 'speedtech' option toggles whether the randomizer logic will expect glitches, exploits, or other methods unintended by Insomniac Games. You can then further customize what tech may be required using the provided categories. Note that 'skips' refers to unintended routes that are accessible via casual movement techniques.
 
