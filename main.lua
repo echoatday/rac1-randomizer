@@ -2,7 +2,7 @@ require 'deepcopy'
 require 'io'
 require 'crc32'
 config = require 'randomizer_settings'
-require 'tables_id'
+-- require 'tables_id'
 require 'tables_logic'
 
 planets = {
@@ -170,11 +170,11 @@ function filewrite(text)
 	file:write(text)
 	file:flush()
 end
-	
+
 
 function Randomize(seed)
 	math.randomseed(seed)
-
+	
 	-- GraphViz file for debugging purposes. Use something like https://dreampuf.github.io/GraphvizOnline/ to view the graph.
 	file = io.open('randomizer_graph.dot', 'w')
 	filewrite("digraph {\n")
@@ -578,9 +578,9 @@ function Randomize(seed)
 		end
 		
 		--print("out_index: " .. out_index)
-		for i, out in pairs(available_outs) do
-			--print(i .. ": " .. out.planet .. " : " .. out.infobot.id)
-		end
+		--for i, out in pairs(available_outs) do
+		-- 	--print(i .. ": " .. out.planet .. " : " .. out.infobot.id)
+		--end
 		
 		--print(available_outs[out_index].infobot.id .. " -> " .. found_planet.id)
 		
@@ -655,17 +655,28 @@ function Randomize(seed)
 	
 	filewrite("}\n")
 	file:close()
+
+	-- Print gunk to the console for racers.
+	local trash = ""									-- put a sequence of numbers into a string according to key and value pairs in randomized tables
+	local cursor = item_list[29]+10						-- select only a few numbers from this string using the last value read in the item list
+	for k,v in ipairs(planet_list) do
+			trash = trash..(k*v)
+	end
+	for k,v in pairs(item_list) do
+		trash = trash..(k*v)
+	end
+	print("Race Code: "..trash:sub(cursor,cursor+5)) 	-- im not much of a math person but the odds here are probably fine
 	
 	-- Apply planet and gadget/item replacements
-	for i=1,18 do
-		Ratchetron:WriteMemory(GAME_PID, 0xB00000 + i, 1, inttobytes(planet_list[i], 1))
+	-- for i=1,18 do
+	-- 	Ratchetron:WriteMemory(GAME_PID, 0xB00000 + i, 1, inttobytes(planet_list[i], 1))
 		
-		PlanetSpecificFix(i, planet_list[i])
-	end
+	-- 	PlanetSpecificFix(i, planet_list[i])
+	-- end
 	
-	for id, replacement in pairs(item_list) do
-		ReplaceItem(id, replacement)
-	end
+	-- for id, replacement in pairs(item_list) do
+	-- 	ReplaceItem(id, replacement)
+	-- end
 	
 	return 1
 end
@@ -674,15 +685,15 @@ function trim1(s)
    return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
-function OnLoad()
+-- function OnLoad()
 	-- Clear any previous randomizer data
-	memset(0xb00000, 0, 0x300)
+	-- memset(0xb00000, 0, 0x300)
 	
 	local seed = os.time()
 
 	-- check config file for seed
 	if config.seed ~= "none" and type(config.seed) == "string" then
-		seed = config.seed
+		seed = LibDeflate:Crc32(trim1(config.seed))
 	end
 
 	-- check config file for graph setting
@@ -701,10 +712,10 @@ function OnLoad()
 
 	print("* Done!")
 	
-	if (game.planet == 0) then
-		game:loadPlanet(0)
-	end
-end
+	-- if (game.planet == 0) then
+	-- 	game:loadPlanet(0)
+	-- end
+-- end
 
 function OnTick(ticks)
 	
@@ -713,5 +724,3 @@ end
 function OnUnload()
 
 end
-
-OnLoad()

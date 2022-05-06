@@ -1,6 +1,6 @@
---      Select true or false for      --
+--    Select  true  or  false  for    --
 --    each option. To set the seed,   --
---     replace none with any text.    --
+--    replace none  with  any text.   --
 --    Please do not edit  anything    --
 --         else in this file.         --
 
@@ -12,7 +12,7 @@ return {
 
 speedtech = 			false	,
 graph = 			true	,
-seed =				"none"
+seed =				"0123456789"
 ,
 
 --       Speedtech Customization      --
