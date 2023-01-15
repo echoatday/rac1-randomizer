@@ -1,9 +1,36 @@
 require 'deepcopy'
 require 'io'
 require 'crc32'
+require 'randomlua'
 config = require 'randomizer_settings'
 -- require 'tables_id'
 require 'tables_logic'
+
+generator = lcg()
+
+Maf = {}
+function Maf:randomseed(seed)
+	print("setting new seed: " .. self)
+	generator:randomseed(self)
+end
+
+local rs = generator:randomseed()
+math.randomseed = function (x)
+	print("using math.randomseed " .. x)
+	rs(x)
+end
+
+function Maf:random(v)
+	local x = 0;
+	if self == nil then
+		x = generator:random()
+		self = 1;
+	else
+		x = generator:random(self)
+	end
+	print("random index: " .. self .. " value: " .. x)
+	return x
+end
 
 planets = {
 	{id=1, name="Novalis", infobots={2,3}, items={0x10}},
@@ -118,7 +145,7 @@ end
 -- Shuffle table
 function shuffle(tbl)
   for i = #tbl, 2, -1 do
-    local j = math.random(i)
+    local j = Maf.random(i)
     tbl[i], tbl[j] = tbl[j], tbl[i]
   end
 end
@@ -173,7 +200,7 @@ end
 
 
 function Randomize(seed)
-	math.randomseed(seed)
+	Maf.randomseed(seed)
 	
 	-- GraphViz file for debugging purposes. Use something like https://dreampuf.github.io/GraphvizOnline/ to view the graph.
 	file = io.open('randomizer_graph.dot', 'w')
@@ -202,7 +229,7 @@ function Randomize(seed)
 		
 		::continue_planet_search::
 		while found_planet == nil do
-			planet_index = math.ceil(math.random() * #available_planets)
+			planet_index = math.ceil(Maf.random() * #available_planets)
 		
 			local working_planet = available_planets[planet_index]
 			
@@ -306,7 +333,7 @@ function Randomize(seed)
 						n_requirements = n_requirements + 1
 					
 						if #item.req_items > 0 then
-							for k, req in ipairs(item.req_items[math.ceil(math.random() * #item.req_items)]) do
+							for k, req in ipairs(item.req_items[math.ceil(Maf.random() * #item.req_items)]) do
 								local has_requirement = false
 								for l, available_item in pairs(item_list) do
 									if item.id == available_item then
@@ -380,7 +407,7 @@ function Randomize(seed)
 						n_requirements = n_requirements + 1
 						
 						if #item.req_items > 0 then
-							for k, req in ipairs(item.req_items[math.ceil(math.random() * #item.req_items)]) do
+							for k, req in ipairs(item.req_items[math.ceil(Maf.random() * #item.req_items)]) do
 								local has_requirement = false
 								for l, available_item in pairs(item_list) do
 									if item.id == available_item then
@@ -427,7 +454,7 @@ function Randomize(seed)
 							end
 						end
 						
-						local item_slot_id = math.ceil(math.random() * #available_item_slots)
+						local item_slot_id = math.ceil(Maf.random() * #available_item_slots)
 						local item_slot = available_item_slots[item_slot_id]
 						
 						-- Check if this item slot has any illegal item replacements
@@ -446,7 +473,7 @@ function Randomize(seed)
 						-- It's still possible, this just does a reroll.
 						if #available_item_slots > 1 and planets[available_outs[out_index].planet].id == item_slot.planet then
 							filewrite("# Trying to pick a different item slot\n")
-							item_slot_id = math.ceil(math.random() * #available_item_slots)
+							item_slot_id = math.ceil(Maf.random() * #available_item_slots)
 							item_slot = available_item_slots[item_slot_id]
 						elseif planets[available_outs[out_index].planet].id == item_slot.planet then
 							filewrite("# Putting item on same planet as its requirement because only " .. #available_item_slots .. " were available.\n")
@@ -508,7 +535,7 @@ function Randomize(seed)
 							table.remove(requirements_left, 1)
 							requirements_left[#requirements_left + 1] = req
 						else
-							local required_items = item_slot.item.req_items[math.ceil(math.random() * #item_slot.item.req_items)]
+							local required_items = item_slot.item.req_items[math.ceil(Maf.random() * #item_slot.item.req_items)]
 							
 							if n_requirements < n_max_item_slots_needed then
 								-- Find smallest item requirement combinations
@@ -703,10 +730,11 @@ end
 	
 	-- Repeatedly generate new path until it works. Bad code makes generation hard
 	while Randomize(seed) <= 0 do
-		--print("")
-		--print("-----------------")
-		--print("-----------------")  -- Just print a bunch of newlines so it's easy to distinguish attempts in the console
-		--print("")
+		-- print(seed)
+		-- print("")
+		-- print("-----------------")
+		-- print("-----------------")  -- Just print a bunch of newlines so it's easy to distinguish attempts in the console
+		-- print("")
 		seed = seed + 1
 	end
 

@@ -1,5 +1,6 @@
 require 'tables_id'
 
+-- strats table
 local strats = {
 	-- VELDIN 1
 	novalis={
@@ -275,7 +276,7 @@ local strats = {
 
 }
 
--- build the locations table
+-- locations table
 local locations = {}
 for location,_ in pairs(strats) do					-- for each location in strats table
 	locations[location] = {}						-- add that place to the locations table!
@@ -415,3 +416,64 @@ local empty_infobots = {
 
 items = ApplyReqs(empty_items)
 infobots = ApplyReqs(empty_infobots)
+
+-- items = {
+-- 	{id=0x02, name="Heli-pack",       req_items={} },
+-- 	{id=0x03, name="Thruster-pack",   req_items={} },
+-- 	{id=0x04, name="Hydro-pack",      req_items={{0x16}} },
+-- 	{id=0x05, name="Sonic Summoner",  req_items={{0x30}} },
+-- 	{id=0x06, name="O2 Mask",         req_items={{0x07}} },
+-- 	{id=0x07, name="Pilot's Helmet",  req_items={} },
+-- 	{id=0x09, name="Suck Cannon",     req_items={{0x02}, {0x03}} },
+-- 	{id=0x0B, name="Devastator",      req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x0C, name="Swingshot",       req_items={} },
+-- 	{id=0x0D, name="Visibomb",        req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x0E, name="Taunter",         req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x0F, name="Blaster",         req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x10, name="Pyrocitor",       req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x11, name="Mine Glove",      req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x12, name="Walloper",        req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x13, name="Tesla Claw",      req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x14, name="Glove of Doom",   req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x15, name="Morph-O-Ray",     req_items={{0x0C}} },
+-- 	{id=0x16, name="Hydrodisplacer",  req_items={{0x1A}} },
+-- 	{id=0x17, name="R.Y.N.O.",        req_items={{0x1B,0x02}, {0x1B,0x03}} },
+-- 	{id=0x18, name="Drone Device",    req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x19, name="Decoy Glove",     req_items={}, ill_items={0x30,0x31,0x32,0x34,0x35} },
+-- 	{id=0x1A, name="Trespasser",      req_items={{0x0C}} },
+-- 	{id=0x1B, name="MetalDetector",   req_items={{0x1C}} },
+-- 	{id=0x1C, name="Magneboots",      req_items={} },
+-- 	{id=0x1D, name="Grindboots",      req_items={{0x0C}} },
+-- 	{id=0x1E, name="Hoverboard",      req_items={} },
+-- 	{id=0x1F, name="Hologuise",       req_items={{0x1E,0x02,0x0C,0x1D}, {0x1E,0x03,0x0C,0x1D}} },
+-- 	{id=0x20, name="PDA",             req_items={{0x1C}} },
+-- 	{id=0x21, name="Map-O-Matic",     req_items={{0x1D}} },
+-- 	{id=0x22, name="Bolt Grabber",    req_items={{0x04,0x06}} },
+-- 	{id=0x23, name="Persuader",       req_items={{0x1A,0x31,0x16}} },
+-- 	{id=0x30, name="Zoomerator",      req_items={{0x1E,0x02}, {0x1E,0x03}} },
+-- 	{id=0x31, name="Raritanium",      req_items={{0x0C,0x02}, {0x0C,0x03}} },
+-- 	{id=0x32, name="Codebot",         req_items={{0x04,0x06}} },
+-- 	{id=0x34, name="Premium Nanotech",req_items={{0x06,0x02}, {0x06,0x03}} },
+-- 	{id=0x35, name="Ultra Nanotech",  req_items={{0x06,0x03,0x34,0x1B}, {0x06,0x02,0x34,0x1B} }},
+--   }
+  
+--   infobots = {
+-- 	{id=0x01, req_items={} },                                 -- Veldin1 -> Novalis
+-- 	{id=0x02, req_items={} },                                 -- Novalis -> Aridia
+-- 	{id=0x03, req_items={} },                                 -- Novalis -> Kerwan
+-- 	{id=0x04, req_items={{0x02}, {0x03}} },                   -- Kerwan -> Eudora
+-- 	{id=0x05, req_items={} },                                 -- Blarg -> Rilgar
+-- 	{id=0x06, req_items={{0x1A,0x0C,0x02}, {0x1A,0x0C,0x03}} }, -- Eudora -> Blarg
+-- 	{id=0x07, req_items={{0x0C,0x16}} },                      -- Rilgar -> Umbris
+-- 	{id=0x08, req_items={{0x0C,0x16}} },                      -- Umbris -> Batalia
+-- 	{id=0x09, req_items={{0x1D}} },                           -- Batalia -> Gaspar
+-- 	{id=0x0A, req_items={} },                                 -- Batalia -> Orxon
+-- 	{id=0x0B, req_items={} },                                 -- Orxon -> Pokitaru
+-- 	{id=0x0C, req_items={{0x06,0x0C,0x1C,0x03}} },            -- Orxon -> Hoven
+-- 	{id=0x0D, req_items={} },                                 -- Hoven -> Gemlik
+-- 	{id=0x0E, req_items={{0x0C, 0x1C, 0x1A, 0x0B}, {0x0C, 0x1C, 0x1A, 0x0D}} },         -- Gemlik -> Oltanis
+-- 	{id=0x0F, req_items={{0x1D}} },                           -- Oltanis -> Quartu
+-- 	{id=0x10, req_items={{0x0C}} },                           -- Quartu -> KaleboIII
+-- 	{id=0x11, req_items={{0x03,0x0C,0x1F}} },                 -- Quartu -> Fleet
+-- 	{id=0x12, req_items={{0x1C,0x1F}} }                       -- Fleet -> Veldin2
+--   }
