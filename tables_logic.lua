@@ -1,6 +1,25 @@
 require 'tables_id'
 
--- strats table
+-- associate categories in settings with substrings
+local settings = {
+	standard='casual',
+-- miscellaneous
+	skips='skip',
+	packless='packless',
+	decoy_clips='decoy',
+	magnewalk='magnewalk',
+-- thruster-pack movement
+	infinite_side_flips='isf',
+	ground_pound_cancels='gpc',
+	thruster_pack_long_jump='tplj',
+-- heli-pack movement
+	infinite_long_jumps='ilj',
+	sinaflips='sinaflip',
+	slope_intercept='slope',
+	neutral_long_jumps='nlj',
+}
+
+-- to add new strats, edit this
 local strats = {
 	-- VELDIN 1
 	novalis={
@@ -276,7 +295,7 @@ local strats = {
 
 }
 
--- locations table
+-- bool version of strats
 local locations = {}
 for location,_ in pairs(strats) do					-- for each location in strats table
 	locations[location] = {}						-- add that place to the locations table!
@@ -285,7 +304,9 @@ for location,_ in pairs(strats) do					-- for each location in strats table
 	end
 end
 
--- toggle an entire category of strats
+
+
+-- toggle an entire category of strats in the location table
 function ActivateCategory(category, new_status)
 	for location,_ in pairs(locations) do							-- for each key location,
 		for strat,_ in pairs(locations[location]) do				-- check its strats.
@@ -322,25 +343,8 @@ function ApplyReqs(local_table)
 end
 
 
--- refer to random_settings.lua
-local settings = {
-	standard='casual',
--- miscellaneous
-	skips='skip',
-	packless='packless',
-	decoy_clips='decoy',
-	magnewalk='magnewalk',
--- thruster-pack movement
-	infinite_side_flips='isf',
-	ground_pound_cancels='gpc',
-	thruster_pack_long_jump='tplj',
--- heli-pack movement
-	infinite_long_jumps='ilj',
-	sinaflips='sinaflip',
-	slope_intercept='slope',
-	neutral_long_jumps='nlj',
-}
 
+-- check speedtech toggle, activate appropriate strats
 if config.speedtech == true then
 	for k,_ in pairs(settings) do
 		ActivateCategory(settings.k, config.k)
@@ -351,7 +355,7 @@ end
 ActivateCategory(settings.standard, true) -- always enable casual strats
 
 
--- build in bordplate table format
+-- final build in bordplate table format
 
 local empty_items = {
 	{id=2, key='heli_pack', name="Heli-pack", req_items={} },
