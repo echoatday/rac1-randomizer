@@ -46,9 +46,7 @@ id = {
 	morph_o_ray=0x15,
 	ryno=0x17,
 
-}
 -- infobot ids
-idb = {
 	novalis=1,
 	aridia=2,
 	kerwan=3,

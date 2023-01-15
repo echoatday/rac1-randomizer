@@ -12,7 +12,7 @@ return {
 
 speedtech = 			false	,
 graph = 			true	,
-seed =				"0123456789"
+seed =				"none"
 ,
 
 --       Speedtech Customization      --

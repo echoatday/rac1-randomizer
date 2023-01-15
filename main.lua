@@ -10,13 +10,13 @@ generator = lcg()
 
 Maf = {}
 function Maf:randomseed(seed)
-	print("setting new seed: " .. self)
+	-- print("setting new seed: " .. self)
 	generator:randomseed(self)
 end
 
 local rs = generator:randomseed()
 math.randomseed = function (x)
-	print("using math.randomseed " .. x)
+	-- print("using math.randomseed " .. x)
 	rs(x)
 end
 
@@ -28,7 +28,7 @@ function Maf:random(v)
 	else
 		x = generator:random(self)
 	end
-	print("random index: " .. self .. " value: " .. x)
+	-- print("random index: " .. self .. " value: " .. x)
 	return x
 end
 
